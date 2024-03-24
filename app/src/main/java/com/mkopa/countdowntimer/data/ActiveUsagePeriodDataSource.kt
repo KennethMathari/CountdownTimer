@@ -10,7 +10,7 @@ import java.time.OffsetDateTime
 @RequiresApi(Build.VERSION_CODES.O)
 class ActiveUsagePeriodDataSource {
 
-    private suspend fun getLockingInfo(): ActiveUsagePeriod{
+    suspend fun getLockingInfo(): ActiveUsagePeriod{
         delay(500)
         return ActiveUsagePeriod(
             lockTime = OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
