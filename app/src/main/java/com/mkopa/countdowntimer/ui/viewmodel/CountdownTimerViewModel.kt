@@ -1,7 +1,6 @@
 package com.mkopa.countdowntimer.ui.viewmodel
 
 import android.os.Build
-import android.os.CountDownTimer
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import com.mkopa.countdowntimer.data.ActiveUsagePeriodDataSource
 import com.mkopa.countdowntimer.data.CountryIsoCodeDataSource
 import com.mkopa.countdowntimer.ui.state.CountDownTimerState
 import com.mkopa.countdowntimer.utils.CountryIsoCode
+import com.mkopa.countdowntimer.utils.Timer
 import com.mkopa.countdowntimer.utils.toFormattedTimeString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CountdownTimerViewModel @Inject constructor(
     private val activeUsagePeriodDataSource: ActiveUsagePeriodDataSource,
-    private val countryIsoCodeDataSource: CountryIsoCodeDataSource
+    private val countryIsoCodeDataSource: CountryIsoCodeDataSource,
+    private val timer: Timer
 ) : ViewModel() {
 
     private val _countDownTimerState = MutableStateFlow(CountDownTimerState())
@@ -34,7 +35,7 @@ class CountdownTimerViewModel @Inject constructor(
         getRemainingTime()
     }
 
-    private fun getRemainingTime() {
+    fun getRemainingTime() {
         viewModelScope.launch {
             val remainingTime = activeUsagePeriodDataSource.getRemainingTime().toMillis()
             val countryIsoCode = countryIsoCodeDataSource.getCountryIsoCode()
@@ -44,29 +45,32 @@ class CountdownTimerViewModel @Inject constructor(
                 else -> TimeUnit.HOURS.toMillis(2)
             }
 
-            object : CountDownTimer(remainingTime, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
+            timer.start(
+                remainingTime,
+                1000,
+                { millisUntilFinished ->
                     _countDownTimerState.update { currentState ->
-                        val color =
-                            if (millisUntilFinished <= warningThreshold) Color(red = 255, green = 165, blue = 0) else Color.Green
+                        val color = if (millisUntilFinished <= warningThreshold) Color(
+                            red = 255,
+                            green = 165,
+                            blue = 0
+                        ) else Color.Green
                         currentState.copy(
                             countDownTimer = millisUntilFinished.toFormattedTimeString(),
                             color = color
                         )
                     }
-                }
-
-                override fun onFinish() {
+                },
+                {
                     _countDownTimerState.update { currentState ->
                         currentState.copy(
-                            countDownTimer = "00:00:00", color = Color.Red
+                            countDownTimer = "00:00:00",
+                            color = Color.Red
                         )
                     }
                 }
-
-            }.start()
+            )
         }
     }
-
 
 }
