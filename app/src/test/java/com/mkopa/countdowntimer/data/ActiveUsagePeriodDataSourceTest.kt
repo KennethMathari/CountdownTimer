@@ -11,6 +11,8 @@ import java.time.OffsetDateTime
 
 class ActiveUsagePeriodDataSourceTest {
     private val activeUsagePeriodDataSource = mockk<ActiveUsagePeriodDataSource>()
+    private val lockTime: OffsetDateTime =
+        OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
 
     @Test
     fun `test getLockingInfo returns current date at 2300h`() = runBlocking {
@@ -18,20 +20,18 @@ class ActiveUsagePeriodDataSourceTest {
         coEvery {
             activeUsagePeriodDataSource.getLockingInfo()
         } returns ActiveUsagePeriod(
-            lockTime = OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
+            lockTime = lockTime
         )
 
         val result = activeUsagePeriodDataSource.getLockingInfo()
 
         assertEquals(
-            OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0).withNano(0),
-            result.lockTime.withNano(0)
+            lockTime.withNano(0), result.lockTime.withNano(0)
         )
     }
 
     @Test
     fun `test getRemainingTime returns correct duration`() = runBlocking {
-        val lockTime = OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
 
         coEvery {
             activeUsagePeriodDataSource.getLockingInfo()
