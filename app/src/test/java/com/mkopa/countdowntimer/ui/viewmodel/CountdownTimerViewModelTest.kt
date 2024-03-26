@@ -81,6 +81,9 @@ class CountdownTimerViewModelTest {
 
             assertEquals(Color.Green, awaitItem().color)
 
+            //3hrs to end of countdown
+            //assertEquals(Color(red = 255, green = 165, blue = 0), awaitItem().color)
+
             cancelAndIgnoreRemainingEvents()
         }
 
