@@ -32,6 +32,7 @@ Other dependencies listed in the build.gradle files.
 
 ## App Screenshots
 > ![](./warning.png)
+> ![](./end.png)
 
 
 <b>Note</b>: Make sure you have the necessary Android SDK components installed and configured in Android Studio before running the project. You may also need to update the dependencies in the build.gradle files to match the latest versions available.
