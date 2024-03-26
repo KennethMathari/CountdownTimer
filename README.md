@@ -1,5 +1,5 @@
 # CountdownTimer
-- This is a simple Android application that demonstrates a countdown timer functionality.
+This is a simple Android application that demonstrates a countdown timer functionality.
 
 ## Setup
 To set up and run this project on your local machine, follow these steps:
@@ -12,7 +12,7 @@ To set up and run this project on your local machine, follow these steps:
 - After opening the project, Gradle will automatically start syncing. Wait for the process to finish.
 
 ## Build and Run
-- After opening the project, build and run to install the app in the emulator or a connected device.
+After opening the project, build and run to install the app in the emulator or a connected device.
 
 ## App Features
 - Count the time left until the device is locked in the format hh:mm:ss finishing at 00:00:00
