@@ -31,6 +31,7 @@ This project uses the following dependencies:
 Other dependencies listed in the build.gradle files.
 
 ## App Screenshots
+> ![](./start.png)
 > ![](./warning.png)
 > ![](./end.png)
 
