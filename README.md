@@ -19,6 +19,15 @@ After opening the project, build and run to install the app in the emulator or a
 - Change color from green to orange to warn users that they need to pay soon
 - Change color to red once 00:00:00 is reached.
 
+## Unit Test
+Unit tests are available in the following files:
+> 1. app/src/test/java/com/mkopa/countdowntimer/data/ActiveUsagePeriodDataSourceTest.kt
+
+> 2. app/src/test/java/com/mkopa/countdowntimer/data/CountryIsoCodeDataSourceTest.kt
+
+> 3. app/src/test/java/com/mkopa/countdowntimer/ui/viewmodel/CountdownTimerViewModelTest.kt
+
+
 ## Dependencies
 This project uses the following dependencies:
 1. <b>[Jetpack Compose](https://developer.android.com/develop/ui/compose)</b>: Android’s recommended modern toolkit for building native UI.
