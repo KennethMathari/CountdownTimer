@@ -7,9 +7,10 @@ import com.mkopa.countdowntimer.data.CountryIsoCodeDataSource
 import com.mkopa.countdowntimer.data.model.ActiveUsagePeriod
 import com.mkopa.countdowntimer.utils.CountryIsoCode
 import com.mkopa.countdowntimer.utils.MainDispatcherRule
+import com.mkopa.countdowntimer.utils.Timer
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -18,16 +19,20 @@ import org.junit.Test
 import java.time.Duration
 import java.time.OffsetDateTime
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CountdownTimerViewModelTest {
     private lateinit var countdownTimerViewModel: CountdownTimerViewModel
     private val activeUsagePeriodDataSource = mockk<ActiveUsagePeriodDataSource>()
+    private val timer = mockk<Timer>()
     private val countryIsoCodeDataSource = mockk<CountryIsoCodeDataSource>()
     private val lockTime: OffsetDateTime =
         OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
 
     private val currentTime: OffsetDateTime = OffsetDateTime.now()
     private val expectedDuration: Duration = Duration.between(currentTime, lockTime)
+
+    private val remainingTime = expectedDuration.toMillis()
+    private val onTickSlot = slot<(Long) -> Unit>()
+    private val onFinishSlot = slot<() -> Unit>()
 
 
     @get:Rule
@@ -51,27 +56,59 @@ class CountdownTimerViewModelTest {
         } returns CountryIsoCode.UG
 
         countdownTimerViewModel =
-            CountdownTimerViewModel(activeUsagePeriodDataSource, countryIsoCodeDataSource)
+            CountdownTimerViewModel(activeUsagePeriodDataSource, countryIsoCodeDataSource, timer)
+
     }
 
     @Test
-    fun `test countdown timer behavior`() = runTest {
+    fun `test getRemainingTime() updates state correctly when timer starts`() = runTest {
 
-        countdownTimerViewModel.countDownTimerState.test {
+        coEvery {
+            timer.start(remainingTime, 1000, capture(onTickSlot), capture(onFinishSlot))
+        } answers {
+            val onTick: (Long) -> Unit = onTickSlot.captured
+            onTick.invoke(remainingTime)
+        }
+
+        val countDownTimerState = countdownTimerViewModel.countDownTimerState
+
+        countDownTimerState.test {
             assertEquals(
-                null,
-                awaitItem().color
+                null, awaitItem().color
             )
+
             countdownTimerViewModel.getRemainingTime()
 
-            assertEquals(
-                Color.Green,
-                awaitItem().color
-            )
+            assertEquals(Color.Green, awaitItem().color)
 
             cancelAndIgnoreRemainingEvents()
         }
+
     }
 
+
+    @Test
+    fun `test getRemainingTime() updates state correctly when timer stops`() = runTest {
+        coEvery {
+            timer.start(remainingTime, 1000, capture(onTickSlot), capture(onFinishSlot))
+        } answers {
+            val onFinish: () -> Unit = onFinishSlot.captured
+            onFinish.invoke()
+        }
+
+        val countDownTimerState = countdownTimerViewModel.countDownTimerState
+
+        countDownTimerState.test {
+            assertEquals(
+                null, awaitItem().color
+            )
+
+            countdownTimerViewModel.getRemainingTime()
+
+            assertEquals(Color.Red, awaitItem().color)
+
+            expectNoEvents()
+        }
+    }
 
 }

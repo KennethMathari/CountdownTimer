@@ -31,10 +31,6 @@ class CountdownTimerViewModel @Inject constructor(
     private val _countDownTimerState = MutableStateFlow(CountDownTimerState())
     val countDownTimerState: StateFlow<CountDownTimerState> get() = _countDownTimerState.asStateFlow()
 
-    init {
-        getRemainingTime()
-    }
-
     fun getRemainingTime() {
         viewModelScope.launch {
             val remainingTime = activeUsagePeriodDataSource.getRemainingTime().toMillis()
@@ -45,31 +41,22 @@ class CountdownTimerViewModel @Inject constructor(
                 else -> TimeUnit.HOURS.toMillis(2)
             }
 
-            timer.start(
-                remainingTime,
-                1000,
-                { millisUntilFinished ->
-                    _countDownTimerState.update { currentState ->
-                        val color = if (millisUntilFinished <= warningThreshold) Color(
-                            red = 255,
-                            green = 165,
-                            blue = 0
-                        ) else Color.Green
-                        currentState.copy(
-                            countDownTimer = millisUntilFinished.toFormattedTimeString(),
-                            color = color
-                        )
-                    }
-                },
-                {
-                    _countDownTimerState.update { currentState ->
-                        currentState.copy(
-                            countDownTimer = "00:00:00",
-                            color = Color.Red
-                        )
-                    }
+            timer.start(remainingTime, 1000, { millisUntilFinished ->
+                _countDownTimerState.update { currentState ->
+                    val color = if (millisUntilFinished <= warningThreshold) Color(
+                        red = 255, green = 165, blue = 0
+                    ) else Color.Green
+                    currentState.copy(
+                        countDownTimer = millisUntilFinished.toFormattedTimeString(), color = color
+                    )
                 }
-            )
+            }, {
+                _countDownTimerState.update { currentState ->
+                    currentState.copy(
+                        countDownTimer = "00:00:00", color = Color.Red
+                    )
+                }
+            })
         }
     }
 

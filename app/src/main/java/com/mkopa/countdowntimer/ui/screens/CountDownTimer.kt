@@ -33,6 +33,8 @@ fun CountDownTimer() {
 
     val countdownTimerViewModel = hiltViewModel<CountdownTimerViewModel>()
     val countdownTimerState by countdownTimerViewModel.countDownTimerState.collectAsStateWithLifecycle()
+    countdownTimerViewModel.getRemainingTime()
+
 
 
     Column(
