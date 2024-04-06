@@ -1,8 +1,13 @@
 package com.mkopa.countdowntimer.ui.state
 
-import androidx.compose.ui.graphics.Color
+import com.mkopa.countdowntimer.ui.viewmodel.KenColor
+import com.mkopa.countdowntimer.utils.RemainingTime
 
-data class CountDownTimerState(
-    val countDownTimer: String? = null,
-    val color: Color? = null
-)
+
+sealed interface CountDownTimerState {
+    data object Initial : CountDownTimerState
+    data class Time(
+        val remainingTime: RemainingTime,
+        val color: KenColor
+    ): CountDownTimerState
+}
