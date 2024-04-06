@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.mkopa.countdowntimer.data.model.ActiveUsagePeriod
 import kotlinx.coroutines.delay
-import java.time.Duration
 import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -17,9 +16,4 @@ class ActiveUsagePeriodDataSource {
         )
     }
 
-    suspend fun getRemainingTime(): Duration{
-        val lockTime = getLockingInfo().lockTime
-        val currentTime = OffsetDateTime.now()
-        return Duration.between(currentTime,lockTime)
-    }
 }

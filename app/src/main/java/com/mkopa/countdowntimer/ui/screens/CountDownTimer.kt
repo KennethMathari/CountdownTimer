@@ -1,7 +1,5 @@
 package com.mkopa.countdowntimer.ui.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,14 +26,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mkopa.countdowntimer.ui.viewmodel.CountdownTimerViewModel
 import com.mkopa.countdowntimer.utils.getBackgroundColor
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CountDownTimer() {
 
     val countdownTimerViewModel = hiltViewModel<CountdownTimerViewModel>()
     val countdownTimerState by countdownTimerViewModel.countDownTimerState.collectAsStateWithLifecycle()
-    countdownTimerViewModel.getRemainingTime()
-
 
 
     Column(
@@ -74,7 +69,6 @@ fun CountDownTimer() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun CountDownTimerPreview() {
