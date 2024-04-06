@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mkopa.countdowntimer.ui.viewmodel.CountdownTimerViewModel
+import com.mkopa.countdowntimer.utils.getBackgroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -52,7 +53,7 @@ fun CountDownTimer() {
                 defaultElevation = 10.dp
             ),
             colors = CardDefaults.cardColors(
-                containerColor = countdownTimerState.color ?: Color.Green
+                containerColor = getBackgroundColor(countdownTimerState.color)
             ),
             border = BorderStroke(2.dp, Color.Black)
         ) {

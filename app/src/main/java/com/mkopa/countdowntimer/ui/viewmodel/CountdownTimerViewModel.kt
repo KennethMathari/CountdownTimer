@@ -2,12 +2,12 @@ package com.mkopa.countdowntimer.ui.viewmodel
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkopa.countdowntimer.data.ActiveUsagePeriodDataSource
 import com.mkopa.countdowntimer.data.CountryIsoCodeDataSource
 import com.mkopa.countdowntimer.ui.state.CountDownTimerState
+import com.mkopa.countdowntimer.utils.BackgroundColor
 import com.mkopa.countdowntimer.utils.CountryIsoCode
 import com.mkopa.countdowntimer.utils.Timer
 import com.mkopa.countdowntimer.utils.toFormattedTimeString
@@ -43,9 +43,9 @@ class CountdownTimerViewModel @Inject constructor(
 
             timer.start(remainingTime, 1000, { millisUntilFinished ->
                 _countDownTimerState.update { currentState ->
-                    val color = if (millisUntilFinished <= warningThreshold) Color(
-                        red = 255, green = 165, blue = 0
-                    ) else Color.Green
+                    val color = if (millisUntilFinished <= warningThreshold)
+                        BackgroundColor.ORANGE
+                    else BackgroundColor.GREEN
                     currentState.copy(
                         countDownTimer = millisUntilFinished.toFormattedTimeString(), color = color
                     )
@@ -53,7 +53,7 @@ class CountdownTimerViewModel @Inject constructor(
             }, {
                 _countDownTimerState.update { currentState ->
                     currentState.copy(
-                        countDownTimer = "00:00:00", color = Color.Red
+                        countDownTimer = "00:00:00", color = BackgroundColor.RED
                     )
                 }
             })
