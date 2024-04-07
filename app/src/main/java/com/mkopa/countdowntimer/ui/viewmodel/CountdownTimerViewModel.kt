@@ -1,7 +1,5 @@
 package com.mkopa.countdowntimer.ui.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkopa.countdowntimer.data.ActiveUsagePeriodDataSource
@@ -19,7 +17,6 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CountdownTimerViewModel @Inject constructor(
     private val activeUsagePeriodDataSource: ActiveUsagePeriodDataSource,

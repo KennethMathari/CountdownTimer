@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Provides
     fun provideActiveUsagePeriodDataSource(): ActiveUsagePeriodDataSource{
         return ActiveUsagePeriodDataSource()

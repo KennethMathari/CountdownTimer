@@ -36,6 +36,7 @@ This project uses the following dependencies:
 4. <b>[Mockk](https://mockk.io/)</b>:mocking library for Kotlin.
 5. <b>[Kotlinx-Coroutines-Test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)</b>: This package provides utilities for efficiently testing coroutines.
 6. <b>[Turbine](https://github.com/cashapp/turbine)</b>: A small testing library for kotlinx.coroutines Flow. 
+7. <b>[Desugar](https://developer.android.com/studio/write/java8-support#library-desugaring)</b>: Allows developers to take advantage of newer Java language features while maintaining compatibility with a broader range of Android devices.
 
 Other dependencies listed in the build.gradle files.
 
