@@ -1,10 +1,10 @@
 package com.mkopa.countdowntimer.ui.viewmodel
 
-import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
 import com.mkopa.countdowntimer.data.ActiveUsagePeriodDataSource
 import com.mkopa.countdowntimer.data.CountryIsoCodeDataSource
 import com.mkopa.countdowntimer.data.model.ActiveUsagePeriod
+import com.mkopa.countdowntimer.utils.BackgroundColor
 import com.mkopa.countdowntimer.utils.CountryIsoCode
 import com.mkopa.countdowntimer.utils.MainDispatcherRule
 import com.mkopa.countdowntimer.utils.Timer
@@ -28,7 +28,8 @@ class CountdownTimerViewModelTest {
         OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
 
     private val currentTime: OffsetDateTime = OffsetDateTime.now()
-    private val expectedDuration: Duration = Duration.between(currentTime, lockTime)
+    private val expectedDuration = Duration.between(currentTime, lockTime)
+
 
     private val remainingTime = expectedDuration.toMillis()
     private val onTickSlot = slot<(Long) -> Unit>()
@@ -58,10 +59,12 @@ class CountdownTimerViewModelTest {
         countdownTimerViewModel =
             CountdownTimerViewModel(activeUsagePeriodDataSource, countryIsoCodeDataSource, timer)
 
+
     }
 
+
     @Test
-    fun `test getRemainingTime() updates state correctly when timer starts`() = runTest {
+    fun `test startTimer() updates state correctly when timer starts`() = runTest {
 
         coEvery {
             timer.start(remainingTime, 1000, capture(onTickSlot), capture(onFinishSlot))
@@ -74,24 +77,24 @@ class CountdownTimerViewModelTest {
 
         countDownTimerState.test {
             assertEquals(
-                null, awaitItem().color
+                BackgroundColor.TRANSPARENT, awaitItem().color
             )
 
-            countdownTimerViewModel.getRemainingTime()
+            countdownTimerViewModel.startTimer()
 
-            assertEquals(Color.Green, awaitItem().color)
+            assertEquals(BackgroundColor.GREEN, awaitItem().color)
 
             //3hrs to end of countdown
-            //assertEquals(Color(red = 255, green = 165, blue = 0), awaitItem().color)
+            // assertEquals(BackgroundColor.ORANGE, awaitItem().color)
 
-            cancelAndIgnoreRemainingEvents()
+            expectNoEvents()
         }
 
     }
 
 
     @Test
-    fun `test getRemainingTime() updates state correctly when timer stops`() = runTest {
+    fun `test startTimer() updates state correctly when timer stops`() = runTest {
         coEvery {
             timer.start(remainingTime, 1000, capture(onTickSlot), capture(onFinishSlot))
         } answers {
@@ -103,12 +106,12 @@ class CountdownTimerViewModelTest {
 
         countDownTimerState.test {
             assertEquals(
-                null, awaitItem().color
+                BackgroundColor.TRANSPARENT, awaitItem().color
             )
 
-            countdownTimerViewModel.getRemainingTime()
+            countdownTimerViewModel.startTimer()
 
-            assertEquals(Color.Red, awaitItem().color)
+            assertEquals(BackgroundColor.RED, awaitItem().color)
 
             expectNoEvents()
         }

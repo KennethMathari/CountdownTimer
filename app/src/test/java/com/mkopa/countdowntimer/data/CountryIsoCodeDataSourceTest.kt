@@ -8,9 +8,10 @@ import org.junit.Test
 
 class CountryIsoCodeDataSourceTest {
 
+    private val countryIsoCodeDataSource = mockk<CountryIsoCodeDataSource>()
+
     @Test
     fun `test getCountryIsoCode returns correct value`() {
-        val countryIsoCodeDataSource = mockk<CountryIsoCodeDataSource>()
 
         every {
             countryIsoCodeDataSource.getCountryIsoCode()

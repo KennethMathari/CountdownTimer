@@ -17,8 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.OffsetDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -39,7 +37,8 @@ class CountdownTimerViewModel @Inject constructor(
 
     fun startTimer() {
         viewModelScope.launch {
-            val remainingTime = getRemainingTime().toMillis()
+
+            val remainingTime = activeUsagePeriodDataSource.getRemainingTime().toMillis()
             val countryIsoCode = countryIsoCodeDataSource.getCountryIsoCode()
 
             val warningThreshold = when (countryIsoCode) {
@@ -49,8 +48,7 @@ class CountdownTimerViewModel @Inject constructor(
 
             timer.start(remainingTime, 1000, { millisUntilFinished ->
                 _countDownTimerState.update { currentState ->
-                    val color = if (millisUntilFinished <= warningThreshold)
-                        BackgroundColor.ORANGE
+                    val color = if (millisUntilFinished <= warningThreshold) BackgroundColor.ORANGE
                     else BackgroundColor.GREEN
                     currentState.copy(
                         countDownTimer = millisUntilFinished.toFormattedTimeString(), color = color
@@ -64,13 +62,6 @@ class CountdownTimerViewModel @Inject constructor(
                 }
             })
         }
-    }
-
-
-    suspend fun getRemainingTime(): Duration {
-        val lockTime = activeUsagePeriodDataSource.getLockingInfo().lockTime
-        val currentTime = OffsetDateTime.now()
-        return Duration.between(currentTime,lockTime)
     }
 
 }
