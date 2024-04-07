@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -47,19 +46,19 @@ class CountdownTimerViewModel @Inject constructor(
             }
 
             timer.start(remainingTime, 1000, { millisUntilFinished ->
-                _countDownTimerState.update { currentState ->
-                    val color = if (millisUntilFinished <= warningThreshold) BackgroundColor.ORANGE
-                    else BackgroundColor.GREEN
-                    currentState.copy(
-                        countDownTimer = millisUntilFinished.toFormattedTimeString(), color = color
-                    )
-                }
+                val color = if (millisUntilFinished <= warningThreshold) BackgroundColor.ORANGE
+                else BackgroundColor.GREEN
+
+                _countDownTimerState.value = CountDownTimerState(
+                    countDownTimer = millisUntilFinished.toFormattedTimeString(),
+                    color = color
+                )
+
             }, {
-                _countDownTimerState.update { currentState ->
-                    currentState.copy(
-                        countDownTimer = "00:00:00", color = BackgroundColor.RED
-                    )
-                }
+                _countDownTimerState.value = CountDownTimerState(
+                    countDownTimer = "00:00:00",
+                    color = BackgroundColor.RED
+                )
             })
         }
     }
