@@ -31,7 +31,7 @@ class ActiveUsagePeriodDataSourceTest {
         val result = activeUsagePeriodDataSource.getLockingInfo()
 
         assertEquals(
-            lockTime.withNano(0), result.lockTime.withNano(0)
+            lockTime, result.lockTime
         )
     }
 

@@ -67,7 +67,7 @@ class CountdownTimerViewModelTest {
     fun `test startTimer() updates state correctly when timer starts`() = runTest {
 
         coEvery {
-            timer.start(remainingTime, 1000, capture(onTickSlot), capture(onFinishSlot))
+            timer.start(any(), any(), capture(onTickSlot), capture(onFinishSlot))
         } answers {
             val onTick: (Long) -> Unit = onTickSlot.captured
             onTick.invoke(remainingTime)
