@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mkopa.countdowntimer.ui.theme.CountdownTimerTheme
 import com.mkopa.countdowntimer.ui.viewmodel.CountdownTimerViewModel
 import com.mkopa.countdowntimer.utils.getBackgroundColor
 
@@ -67,10 +68,4 @@ fun CountDownTimer() {
         }
 
     }
-}
-
-@Preview
-@Composable
-fun CountDownTimerPreview() {
-    CountDownTimer()
 }
